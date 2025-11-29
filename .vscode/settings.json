@@ -2,6 +2,19 @@
     "files.associations": {
         "*.html.*": "html",
         "cstdint": "cpp",
-        "unordered_map": "cpp"
+        "unordered_map": "cpp",
+        "bitset": "cpp",
+        "string": "cpp",
+        "regex": "cpp",
+        "string_view": "cpp",
+        "fstream": "cpp",
+        "iomanip": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp",
+        "sstream": "cpp",
+        "stdexcept": "cpp",
+        "system_error": "cpp",
+        "typeinfo": "cpp",
+        "tuple": "cpp"
     }
 }
