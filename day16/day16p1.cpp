@@ -38,7 +38,7 @@ void print_tunnels(std::unordered_map<std::string, std::tuple<int, std::vector<s
     {
         const auto& name = t.first;
         const auto& entry = t.second;
-        std::cout << "(" << name << ") : ( " << std::get<0>(entry) << ", [ ";
+        std::cout << name << " : ( " << std::get<0>(entry) << ", [ ";
         for (const auto& s : std::get<1>(entry))
         {
             std::cout << s << " ";
