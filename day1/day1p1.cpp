@@ -86,7 +86,6 @@ L82)";
     //cout << "Num Zeros: " << zeros << "\n";
 
     //auto rots = parse_input(test_input);
-    //cout << "Max Val: " << get_max(rots) << endl;
 
     // Using Real input
     string input{};
@@ -97,8 +96,6 @@ L82)";
     }
 
     auto rots = parse_input(input);
-    cout << "Max Val: " << get_max(rots) << endl;
-    
 
     bool prev_zero = false;
     // PART 2
