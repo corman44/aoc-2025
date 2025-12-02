@@ -41,4 +41,4 @@
 *.dwo
 
 # input files
-*day*input.txt
+*day*/input.txt
