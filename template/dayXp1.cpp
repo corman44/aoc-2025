@@ -15,16 +15,23 @@ int main(int argc, char** argv) {
     }
 
     // Using Example input
-    string test_input = R"()";
+    string input = R"()";
+    //formatting string to vector<string>
+    //istringstream stream(input);
+    //string str{};
+    //vector<string> lines{};
+    //while (getline(input,str))
+    //{
+        //lines.push_back(str);
+    //}
 
     // Using Real input
-    //string input{};
+    //vector<string> lines{};
     //string str{};
     //while (getline(in,str))
     //{
-        //input.append(str + '\n');
+        //lines.push_back(str);
     //}
-    
 
     return 0;
 }
