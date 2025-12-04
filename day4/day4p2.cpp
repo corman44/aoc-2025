@@ -54,6 +54,7 @@ bool roll_accessible(Map& map, Cell cell)
             else if (map.map[y_check][x_check])
             {
                 adj_rolls++;
+                //removed_paper.push_back(Cell{(size_t)x_check,(size_t)y_check});
             }
         }
     }
@@ -68,7 +69,6 @@ int main(int argc, char** argv) {
         return 2;
     }
 
-    //Using Real input
     vector<string> input{};
     string str{};
     while (getline(in,str))
@@ -77,13 +77,35 @@ int main(int argc, char** argv) {
     }
     
     auto map = parse_input(input);
+    vector<Cell> removed_paper{};
     int total = 0;
-    for(size_t y=0;y<map.map.size();++y)
+    int last_count = 1;
+
+    while(last_count > 0)
     {
-        for(size_t x=0;x<map.map[0].size();++x)
+        //reset count
+        last_count = 0;
+
+        for(size_t y=0;y<map.map.size();++y)
         {
-            total += map.map[y][x] && roll_accessible(map,Cell{x,y}) ? 1 : 0;
+            for(size_t x=0;x<map.map[0].size();++x)
+            {
+                if (map.map[y][x] && roll_accessible(map, Cell{x,y}))
+                {
+                    last_count++;
+                    removed_paper.push_back(Cell{x,y});
+                }
+            }
         }
+
+        //remove accessible
+        for(auto& towel: removed_paper)
+        {
+            map.map[towel.y][towel.x] = false;
+        }
+        removed_paper.clear();
+
+        total += last_count;
     }
 
     cout << "Total Accessible: " << total << endl;
