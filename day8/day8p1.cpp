@@ -44,7 +44,7 @@ vector<Vec3> parse_input(vector<string> lines)
 }
 
 uint16_t euclid_distance(Vec3 first, Vec3 sec) {
-    uint16_t dist = sqrt(pow(first.X - sec.Y, 2) + pow(first.Y - sec.Y, 2) + pow(first.Z - sec.Z, 2));
+    uint16_t dist = sqrt(pow(first.X - sec.X, 2) + pow(first.Y - sec.Y, 2) + pow(first.Z - sec.Z, 2));
     return dist;
 }
 
