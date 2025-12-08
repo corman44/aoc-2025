@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <unordered_set>
+#include <tuple>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -64,7 +65,7 @@ vector<vector<Cell>> parse_input(vector<string> lines)
     return cells;
 }
 
-bool step_beams(vector<vector<Cell>>& cells, unordered_set<Coord>& beams, uint16_t& splits_hit) {
+bool step_beams(vector<vector<Cell>>& cells, unordered_set<Coord>& beams, unordered_set<Coord>& split_hits) {
     bool beams_updated{};
     auto row_size = cells.size();
     auto col_size = cells[0].size();
@@ -80,7 +81,8 @@ bool step_beams(vector<vector<Cell>>& cells, unordered_set<Coord>& beams, uint16
         }
         // check if next is splitter otherwise move beam down
         else if (cells[beam.row+1][beam.col] == Cell::Splitter) {
-            splits_hit++;
+            // add Split to hit splits
+            split_hits.emplace(Coord{beam.row+1, beam.col});
             l_beam.row = beam.row + 1;
             l_beam.col = beam.col - 1;
             beams_updated = true;
@@ -93,7 +95,6 @@ bool step_beams(vector<vector<Cell>>& cells, unordered_set<Coord>& beams, uint16
             beams.emplace(l_beam);
             l_beam.col += 2;
             beams.emplace(l_beam);
-            
         }
         else {
             l_beam = beam;
@@ -163,7 +164,7 @@ int main(int argc, char** argv) {
         //}
     //}
 
-    uint16_t splits_hit=0;
+    unordered_set<Coord> splits_hit{};
     bool updated=true;
     const auto& start_col = find(cells[0].begin(), cells[0].end(), Cell::Start) - cells[0].begin();
     unordered_set<Coord> beams{};
@@ -174,7 +175,7 @@ int main(int argc, char** argv) {
 
     print_cells(cells);
 
-    cout << "Splits Hit: " << splits_hit << endl;
+    cout << "Splits Hit: " << splits_hit.size() << endl;
 
     return 0;
 }
