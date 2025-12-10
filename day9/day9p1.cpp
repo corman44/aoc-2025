@@ -6,21 +6,19 @@
 #include <string>
 #include <vector>
 
-// [ ] find largest distance between 2 points
-
 using namespace std;
 
 struct Coord {
-    uint64_t row,col;
+    int64_t row,col;
 };
 
 bool operator==(const Coord& c1, const Coord& c2) {
     return c1.row == c2.row && c1.col == c2.col;
 }
 
-uint64_t str_to_int(string str)
+int64_t str_to_int(string str)
 {
-    uint64_t num=0;
+    int64_t num=0;
     for(int i = 0; i < str.length(); ++i)
     {
         num *= 10;
@@ -29,9 +27,11 @@ uint64_t str_to_int(string str)
     return num;
 }
 
-uint64_t euclidian_dist(const Coord& c1, const Coord& c2) {
-    return sqrt(pow(c1.col - c2.col, 2) + pow(c1.row - c2.row,2));
-}
+//int64_t euclidian_dist(const Coord& c1, const Coord& c2) {
+    //int64_t num1 = c1.col - c2.col;
+    //int64_t num2 = c1.row - c2.row;
+    //return sqrt(pow(num1, 2) + pow(num2, 2));
+//}
 
 vector<Coord> parse_input(vector<string> lines)
 {
@@ -43,6 +43,10 @@ vector<Coord> parse_input(vector<string> lines)
     }
 
     return coords;
+}
+
+int64_t inclusive_area(const Coord& c1, const Coord& c2) {
+    return (abs(c1.col - c2.col) + 1) * (abs(c1.row - c2.row) + 1);
 }
 
 int main(int argc, char** argv) {
@@ -61,24 +65,24 @@ int main(int argc, char** argv) {
     }
 
     auto coords = parse_input(lines);
-    uint64_t far_dist{};
-    tuple<Coord,Coord> furthest{};
+    int64_t big_area{};
+    tuple<Coord,Coord> far_coords{};
     for(const auto& c1: coords) {
         for (const auto& c2: coords) {
-            if (c1 == c2) {
+            if (c1 == c2 || c1.row == c2.row || c1.col == c2.col) {
                 continue;
             }
-            if (euclidian_dist(c1,c2) > far_dist) {
-                far_dist = euclidian_dist(c1,c2);
-                furthest = make_tuple(c1,c2); 
+            if (inclusive_area(c1,c2) > big_area) {
+                big_area = inclusive_area(c1,c2);
+                far_coords = make_tuple(c1,c2); 
             }
         }
     }
 
-    auto largest = (sqrt(pow(get<0>(furthest).row - get<1>(furthest).row, 2)) + 1) * (sqrt(pow((get<0>(furthest).col - get<1>(furthest).col),2)) + 1);
-
     return 0;
 }
+// winner: 4725826296
 
-// too low: 4472808582
+// wrong:   4725759204
+// too low: 4472808582, 4472727908
 // too high: 18446744073709549568
