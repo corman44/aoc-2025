@@ -11,25 +11,52 @@ using namespace std;
 //  - Server Output = map<server, vec<servers>>
 //  - Path = vector<string>
 
-struct ServerData {
+struct ServerData
+{
     vector<string> outputs;
-    vector<string> shortest_path;
+};
+
+struct Graph2D
+{
+private:
+    unordered_map<string, vector<string>> adjList;
+
+public:
+    void addNode(const string& node) {
+        if (adjList.find(node) == adjList.end()) {
+            adjList[node] = {};
+        }
+    }
+
+    bool addConnection(const string& node, const string& conn) {
+        if (adjList.find(conn) == adjList.end()) {
+            return false;
+        }
+
+        adjList[conn].push_back(conn);
+    }
+
+    vector<string> getConnections(const string& node) {
+        return adjList[node];
+    }
 };
 
 unordered_map<string, ServerData> parse_input(vector<string> lines)
 {
     unordered_map<string, ServerData> servers{};
-    for (const auto& line: lines) {
+    for (const auto &line : lines)
+    {
         const auto colon = line.find(':');
-        stringstream ss(line.substr(colon+2));
+        stringstream ss(line.substr(colon + 2));
         string sub;
 
-        const auto key = line.substr(0,3);
+        const auto key = line.substr(0, 3);
         vector<string> empty_vec_str{};
 
         servers[key] = ServerData{};
 
-        while (ss >> sub) {
+        while (ss >> sub)
+        {
             servers[key].outputs.push_back(sub);
         }
     }
@@ -37,17 +64,19 @@ unordered_map<string, ServerData> parse_input(vector<string> lines)
     return servers;
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv)
+{
     std::string path = (argc > 1) ? argv[1] : "test.txt";
     std::ifstream in(path);
-    if (!in) {
+    if (!in)
+    {
         std::cerr << "Failed to open '" << path << "'\n";
         return 2;
     }
 
     vector<string> lines{};
     string str{};
-    while (getline(in,str))
+    while (getline(in, str))
     {
         lines.push_back(str);
     }
