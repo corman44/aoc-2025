@@ -1,6 +1,7 @@
 #include <cstdint>
 #include <iostream>
 #include <fstream>
+#include <unordered_set>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -124,6 +125,37 @@ int main(int argc, char** argv) {
     }
 
     auto lds = parse_input(lines);
+    vector<size_t> min_presses{};
+    
+    for (auto& ld: lds) {
+        
+        // stop while loop when the goal matches the current light's status
+        bool goal_match = false;
+        size_t presses = 0;
+        unordered_set<uint16_t> states{};
+
+        while(!goal_match) {
+            ++presses;
+
+            // keep traversing all paths (with BFS) until we find a match
+
+            
+            // check if match found
+            goal_match = states.find(ld.indicator.light_goal) != states.end();
+        }
+
+        min_presses.push_back(presses);
+    }
+
+    cout << "All Min Presses: ";
+
+    auto sum = 0;
+    for (const auto& press: min_presses) {
+        sum += press;
+        cout << press << " ";
+    }
+
+    cout << endl << "Sum = " << sum << endl;
 
     return 0;
 }
