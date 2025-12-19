@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 using namespace std;
@@ -13,7 +14,8 @@ using namespace std;
 
 struct ServerData
 {
-    vector<string> outputs;
+    unordered_set<string> outputs;
+
 };
 
 struct Graph2D
@@ -57,7 +59,7 @@ unordered_map<string, ServerData> parse_input(vector<string> lines)
 
         while (ss >> sub)
         {
-            servers[key].outputs.push_back(sub);
+            servers[key].outputs.emplace(sub);
         }
     }
 
@@ -83,6 +85,29 @@ int main(int argc, char **argv)
 
     unordered_map<string, ServerData> servers{};
     servers = parse_input(lines);
+
+    // BFS of all servers
+    // Starting point is "you"
+
+    bool done = false;
+    vector<string> paths;
+    int path_totals = 0;
+
+    // init starting outputs (from "you")
+    for (const auto& output: servers["you"].outputs) {
+        paths.push_back(output);
+    }
+
+    while(!done) {
+
+        for (auto& path: paths) {
+            //gather outputs from this name
+            if (servers[path].outputs.contains("out")) {
+                // add one to found paths
+                path_totals += 1;
+            }
+        }
+    }
 
     return 0;
 }
