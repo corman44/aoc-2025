@@ -112,7 +112,7 @@ vector<LightDiagram> parse_input(vector<string> lines)
 }
 
 int main(int argc, char** argv) {
-    std::string path = (argc > 1) ? argv[1] : "test.txt";
+    std::string path = (argc > 1) ? argv[1] : "input.txt";
     std::ifstream in(path);
     if (!in) {
         std::cerr << "Failed to open '" << path << "'\n";
@@ -139,19 +139,19 @@ int main(int argc, char** argv) {
         unordered_set<uint16_t > curr_set{};
         uint16_t  num;
 
-        // initialize last set
+        // initialize last set with all of the first buttons (as if first buttons are already pressed)
         for (auto& l: ld.buttons) {
-            last_set.insert(push_button(0, l, 5));
+            last_set.insert(push_button(0, l, ld.indicator.num_lights));
         }
+
+        // check if first button press matches light goal
+        goal_match = last_set.find(ld.indicator.light_goal) != last_set.end();
 
         while(!goal_match) {
             ++presses;
 
-            for (auto& state: last_set) {
-                curr_set.emplace(state);
-            }
-
             // keep traversing all paths (with BFS) until we find a match
+            //  - push all buttons and place the values in the current set
             for (auto& curr: last_set) {
                 for (auto& button: ld.buttons) {
                     uint16_t  num = push_button(curr, button, ld.indicator.num_lights);
@@ -162,11 +162,13 @@ int main(int argc, char** argv) {
             // check if match found
             goal_match = curr_set.find(ld.indicator.light_goal) != curr_set.end();
 
+            // set last_set to curr_set and clear curr_set
             last_set = curr_set;
             curr_set.clear();
         }
 
         min_presses.push_back(presses);
+        last_set.clear();
     }
 
     cout << "All Min Presses: ";
@@ -181,3 +183,5 @@ int main(int argc, char** argv) {
 
     return 0;
 }
+
+// Too High: 576
