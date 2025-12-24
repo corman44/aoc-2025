@@ -44,10 +44,44 @@ uint64_t apply_operand(Operand& op, vector<uint64_t> nums){
     }
 }
 
-tuple< vector<vector<uint64_t>>, vector<Operand> > parse_input(vector<string> lines)
+tuple< vector<vector<uint64_t>>, vector<Operand> > parse_input(vector<string> lines, vector<size_t>& whites)
 {
     vector<vector<uint64_t>> numbers{};
     vector<Operand> operands{};
+    vector<size_t> whitespaces{};
+
+    // collect all Operands and white space in between
+    string ops = lines[lines.size() - 1];
+    size_t ws_count = 0;
+
+    for (const auto &c : ops)
+    {
+        // check if operand otherwise increment WS counter
+        switch (c)
+        {
+        case ' ':
+            ++ws_count;
+            break;
+        case '*':
+            operands.push_back(Operand::Multiply);
+            whitespaces.push_back(ws_count);
+            ws_count = 0;
+            break;
+        case '+':
+            operands.push_back(Operand::Add);
+            whitespaces.push_back(ws_count);
+            ws_count = 0;
+            break;
+        default:
+            break;
+        }
+    }
+
+    // push extra ws and pop first one
+    whitespaces.push_back(ws_count + 1);
+    whitespaces.erase(whitespaces.begin());
+
+    whites = whitespaces;
 
     // collect all number
     int idx = 0;
@@ -98,7 +132,7 @@ vector<vector<uint64_t>> transpose(const vector<vector<uint64_t>>& nums) {
 
 
 int main(int argc, char** argv) {
-    std::string path = (argc > 1) ? argv[1] : "input.txt";
+    std::string path = (argc > 1) ? argv[1] : "test.txt";
     std::ifstream in(path);
     if (!in) {
         std::cerr << "Failed to open '" << path << "'\n";
@@ -112,7 +146,15 @@ int main(int argc, char** argv) {
         lines.push_back(str);
     }
 
-    auto [numbers, ops] = parse_input(lines);
+    vector<size_t> whitespaces;
+    auto [numbers, ops] = parse_input(lines, whitespaces);
+
+    int ws_idx = 0;
+    for (const auto& ws: whitespaces) {
+        for (int i = 0; i < ws; ++i) {
+        }
+        ++ws_idx;
+    }
 
     auto transposed = transpose(numbers);
 
